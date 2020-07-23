@@ -4,7 +4,7 @@ import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native'
 class HomeScreen extends React.Component {
     
     displayCamera = () => {
-        console.log(this.props);
+        // console.log(this.props);
         this.props.navigation.navigate('CameraScreen');
     }
     

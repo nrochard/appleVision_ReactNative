@@ -41,9 +41,12 @@ export default class App extends React.Component {
 
   _takePicture = async () => {
     if (this.camera) {
-      let photo = await this.camera.takePictureAsync();
+      const options = { quality: 0.5, base64: true };
+      let photo = await this.camera.takePictureAsync(options);
       var picturePath = photo.uri;
-      this.props.navigation.navigate('showPicture', {photo: picturePath});
+      var pictureBase = photo.base64;
+      // console.log('photo', photo);
+      this.props.navigation.navigate('showPicture', {photo: picturePath, base : pictureBase});
     //   console.log(this.props.navigation)
     // console.log(picturePath);
         

@@ -8,6 +8,7 @@ import showPicture from '../screens/showPicture'
 import HomeScreen from '../screens/homeScreen'
 import AppleScreen from '../screens/appleScreen'
 import NotAppleScreen from '../screens/notAppleScreen'
+import ResultScreen from '../screens/resultScreen'
 import { StyleSheet, Image } from 'react-native';
 
 const SearchStackNavigator = createStackNavigator({
@@ -28,7 +29,16 @@ const SearchStackNavigator = createStackNavigator({
         navigationOptions: {
         title: 'Picture'
         }
+    },
+    ResultScreen: {
+      screen: ResultScreen,
+      navigationOptions: {
+        title : 'Result',
+        headerLeft: () => {null}
+      }
     }
+
+
 })
 
 const AppleTabNavigator = createBottomTabNavigator({
