@@ -71,17 +71,7 @@ export default class App extends React.Component {
       return (
           <View style={{ flex: 1 }}>
             <Camera style={{ flex: 1 }} type={this.state.cameraType} ref={ref => {this.camera = ref;}}>
-            <View style={{flex:1, flexDirection:"row",justifyContent:"space-between",margin:20}}>
-
-              <TouchableOpacity
-              style={styles.icone}
-              onPress={()=>{this._pickImage()}}>
-                <Ionicons
-                name="ios-photos"
-                style={{ color: "#fff", fontSize: 40}}
-                />
-              </TouchableOpacity>
-                
+            <View style={{flex:1, flexDirection:"row",justifyContent:"center", alignItems: 'flex-end',margin:20}}>
               <TouchableOpacity
                   style={styles.icone}
                   onPress={()=>{this._takePicture()}}>
@@ -90,16 +80,6 @@ export default class App extends React.Component {
                     style={{ color: "#fff", fontSize: 40}}
                     />
               </TouchableOpacity>
-              
-              <TouchableOpacity
-              style={styles.icone}
-              onPress={()=>{this._flipCameraType()}}>
-                <MaterialCommunityIcons
-                name="camera-switch"
-                style={{ color: "#fff", fontSize: 40}}
-                />
-              </TouchableOpacity>
-              
             </View>
           </Camera>
         </View>
@@ -114,10 +94,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  icone:{
-    alignSelf: 'flex-end',
-    alignItems: 'center',
-    backgroundColor: 'transparent',
   }
 });

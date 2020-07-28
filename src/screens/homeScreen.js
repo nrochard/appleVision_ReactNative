@@ -24,7 +24,7 @@ class HomeScreen extends React.Component {
                     <TouchableOpacity 
                     style={styles.button}
                     onPress={() => this.displayCamera()}>
-                        <Text style={styles.textButton}>Let's go</Text>
+                        <Text style={styles.textButton}>Prendre une photo</Text>
                     </TouchableOpacity>
                 </View>
             </View>

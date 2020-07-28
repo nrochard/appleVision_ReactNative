@@ -4,7 +4,6 @@ import { getResultFromApi } from '../api/googleVision';
 import uuid4 from "uuid4";
 import * as firebase from 'firebase';
 import ApiKeys from '../config/Firebase';
-import * as Random from 'expo-random';
 
 class ResultScreen extends React.Component {
 
