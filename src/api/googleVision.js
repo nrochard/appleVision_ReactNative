@@ -1,7 +1,6 @@
 import Environment from '../config/Environment';
 
 export async function getResultFromApi (picturePath) {
-    // console.log(picturePath);
     try {
         let body = JSON.stringify({
           requests: [
@@ -36,7 +35,6 @@ export async function getResultFromApi (picturePath) {
           }
         );
         let responseJson = await response.json();
-        // console.log(responseJson);
         return responseJson;
       } catch (error) {
         console.log(error);

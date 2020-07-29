@@ -12,33 +12,26 @@ import ResultScreen from '../screens/resultScreen'
 import { StyleSheet, Image } from 'react-native';
 
 const SearchStackNavigator = createStackNavigator({
-    // HomeScreen:{
-    //     screen: HomeScreen,
-    //     navigationOptions:{
-    //         title: 'Home'
-    //     }
-    // },
     CameraScreen: {
         screen: CameraScreen,
         navigationOptions: {
-        title: 'Camera'
+        title: 'Camera',
+        headerShown: false
         }
     },
     showPicture: {
         screen: showPicture,
         navigationOptions: {
-        title: 'Picture'
+        title: 'Photo prise',
         }
     },
     ResultScreen: {
       screen: ResultScreen,
       navigationOptions: {
-        title : 'Result',
-        headerLeft: () => {null}
+        title : 'Résultat',
+        headerShown: false
       }
     }
-
-
 })
 
 const AppleTabNavigator = createBottomTabNavigator({
@@ -50,7 +43,7 @@ const AppleTabNavigator = createBottomTabNavigator({
               source={require('../../assets/images/home.png')}
               style={styles.icon}/> 
           }
-      }
+      },
     },
     CameraScreen: {
       screen: SearchStackNavigator,
@@ -85,10 +78,10 @@ const AppleTabNavigator = createBottomTabNavigator({
     },
     {
         tabBarOptions: {
-          activeBackgroundColor: '#DDDDDD', // Couleur d'arrière-plan de l'onglet sélectionné
-          inactiveBackgroundColor: '#FFFFFF', // Couleur d'arrière-plan des onglets non sélectionnés
-          showLabel: false, // On masque les titres
-          showIcon: true, // On informe le TabNavigator qu'on souhaite afficher les icônes définis
+          activeBackgroundColor: '#DDDDDD',
+          inactiveBackgroundColor: '#FFFFFF',
+          showLabel: false, 
+          showIcon: true,
         }
       }
   )
@@ -100,5 +93,4 @@ const AppleTabNavigator = createBottomTabNavigator({
     }
   })
 
-// export default createAppContainer(SearchStackNavigator)
 export default createAppContainer(AppleTabNavigator)

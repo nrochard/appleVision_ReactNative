@@ -2,63 +2,31 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
-import { FontAwesome, Ionicons,MaterialCommunityIcons } from '@expo/vector-icons';
-import * as ImagePicker from 'expo-image-picker';
+import { FontAwesome } from '@expo/vector-icons';
 
 export default class App extends React.Component {
 
-  state = {
-    hasPermission: null,
-    type: Camera.Constants.Type.back,
+  constructor(props){
+    super(props)
+    this.state = {
+      hasPermission: null,
+      type: Camera.Constants.Type.back,
+    }
   }
 
   async componentDidMount() {
-    this._getPermissionAsync()
+    const { status } = await Permissions.askAsync(Permissions.CAMERA);
+    status === 'granted' ? this.setState({ hasPermission: status === 'granted' }) : alert('Désolée, l\'application a besoin d\'accéder à la caméra pour fonctionner!')
   }
 
-  _getPermissionAsync = async () => {
-      // Camera roll Permission 
-      if (Platform.OS === 'ios') {
-        const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-        if (status !== 'granted') {
-          alert('Sorry, we need camera roll permissions to make this work!');
-        }
-      }
-      // Camera Permission
-      const { status } = await Permissions.askAsync(Permissions.CAMERA);
-      this.setState({ hasPermission: status === 'granted' });
-  }
-
-  _flipCameraType=()=>{
-    const { cameraType } = this.state
-
-    this.setState({cameraType:
-      cameraType === Camera.Constants.Type.back
-      ? Camera.Constants.Type.front
-      : Camera.Constants.Type.back
-    })
-  }
-
-  _takePicture = async () => {
+  takePicture = async () => {
     if (this.camera) {
       const options = { quality: 0.5, base64: true };
       let photo = await this.camera.takePictureAsync(options);
       var picturePath = photo.uri;
       var pictureBase = photo.base64;
-      // console.log('photo', photo);
       this.props.navigation.navigate('showPicture', {photo: picturePath, base : pictureBase});
-    //   console.log(this.props.navigation)
-    // console.log(picturePath);
-        
     }
-  }
-
-  _pickImage = async () => {
-    let photo = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-    });
-    var picturePath = photo.uri;
-    this.props.navigation.navigate('showPicture', {photo: picturePath});
   }
 
   render(){
@@ -66,7 +34,9 @@ export default class App extends React.Component {
     if (hasPermission === null) {
       return <View />;
     } else if (hasPermission === false) {
-      return <Text>No access to camera</Text>;
+      return <Text style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        L'accès à la caméra n'est pas autorisé, merci de modifier cela dans les paramètres généraux de votre téléphone
+        </Text>;
     } else {
       return (
           <View style={{ flex: 1 }}>
@@ -74,7 +44,7 @@ export default class App extends React.Component {
             <View style={{flex:1, flexDirection:"row",justifyContent:"center", alignItems: 'flex-end',margin:20}}>
               <TouchableOpacity
                   style={styles.icone}
-                  onPress={()=>{this._takePicture()}}>
+                  onPress={()=>{this.takePicture()}}>
                     <FontAwesome
                     name="camera"
                     style={{ color: "#fff", fontSize: 40}}

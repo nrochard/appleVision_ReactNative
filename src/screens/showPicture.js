@@ -1,6 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
-import Environment from '../config/Environment';
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 
 export default class ProfileImageEdit extends React.Component {
     render() {

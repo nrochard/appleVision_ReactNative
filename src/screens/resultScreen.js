@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, ActivityIndicator, Alert } from 'react-native';
+import { Text, View, StyleSheet, ActivityIndicator, Alert, TouchableOpacity } from 'react-native';
 import { getResultFromApi } from '../api/googleVision';
 import uuid4 from "uuid4";
 import * as firebase from 'firebase';
@@ -11,7 +11,7 @@ class ResultScreen extends React.Component {
         super(props)
         this.state = {
             result: undefined, 
-            isLoading: true // A l'ouverture de la vue, on affiche le chargement, le temps de récupérer le détail du film
+            isLoading: true
         }
         if (!firebase.apps.length) {firebase.initializeApp(ApiKeys.FirebaseConfig); }
       }
@@ -19,32 +19,23 @@ class ResultScreen extends React.Component {
       componentDidMount() {
         getResultFromApi(this.props.navigation.state.params.base).then(data => {
             for (const label of data.responses[0].labelAnnotations) {
-              // console.log("DATA =", data)
               if (label.description === 'Apple') {
                 this.setState({
                   result: label.description,                   
                 })
               }
             }
-            // console.log(this.props.navigation.state.params.photo);
             let pathName = this.props.navigation.state.params.photo;
             let imageName = pathName.split('/');
           
               this.uploadImage(this.props.navigation.state.params.photo, imageName[14])
               .then(() => {
-                Alert.alert("Success");
+                this.state.result === 'Apple' ? Alert.alert("Retrouvez cette photo dans l'onglet POMME en actualisant") : Alert.alert("Retrouvez cette photo dans l'onglet POUBELLE en actualisant");
               })
               .catch((error) => {
                 console.log(error);
               });
-
               this.storeImage(this.props.navigation.state.params.photo, imageName[14])
-              // .then(() => {
-              //   Alert.alert("Success");
-              // })
-              // .catch((error) => {
-              //   console.log(error);
-              // });
             this.setState({
                 isLoading: false
               })
@@ -56,7 +47,8 @@ class ResultScreen extends React.Component {
         const uploadData = {
         id: id,
         photoPath: uri,
-        photoName: photoName
+        photoName: photoName, 
+        date: new Date()
         }
         if (this.state.result === 'Apple'){
           return firebase
@@ -97,12 +89,26 @@ class ResultScreen extends React.Component {
         }
       }
 
+      displayCamera = () => {
+        this.props.navigation.navigate('CameraScreen');
+    }
+    
+
       displayResult(){
         const { result } = this.state
         if (result != undefined) {
           return (
               <View style={styles.main_container_apple}>
-                <Text style={styles.text_result}>C'est une pomme</Text>
+                <View style={{flex: 3, justifyContent: 'center'}}>
+                    <Text style={styles.text_result}>C'est une pomme</Text>
+                  </View>
+                  <View style={styles.containerButton}>
+                  <TouchableOpacity 
+                    style={styles.button}
+                    onPress={() => this.displayCamera()}>
+                        <Text style={styles.textButton}>Reprendre une photo</Text>
+                    </TouchableOpacity>
+                  </View>
               </View>
 
           )
@@ -110,7 +116,16 @@ class ResultScreen extends React.Component {
         else {
             return (
                 <View style={[styles.main_container_error]}>
+                  <View style={{flex: 3, justifyContent: 'center'}}>
                     <Text style={styles.text_result}>Ce n'est pas une pomme</Text>
+                  </View>
+                  <View style={styles.containerButton}>
+                  <TouchableOpacity 
+                    style={styles.button}
+                    onPress={() => this.displayCamera()}>
+                        <Text style={styles.textButton}>Reprendre une photo</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
             )
         }
@@ -125,7 +140,6 @@ class ResultScreen extends React.Component {
         )
       }
 }
-
 
 const styles = StyleSheet.create({
     main_container: {
@@ -159,7 +173,21 @@ const styles = StyleSheet.create({
         fontFamily: 'Futura',
         color: '#FFFFFF',
         textAlign: 'center'
-    }
+    },
+    containerButton:{
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center'
+  },
+  button: {
+      alignItems: "center",
+      backgroundColor: "#DDDDDD",
+      padding: 20,
+  },
+  textButton:{
+    fontSize: 20,
+    fontFamily: 'Futura',
+}
   })
 
   

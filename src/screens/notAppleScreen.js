@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import ApiKeys from '../config/Firebase';
 import * as firebase from 'firebase';
-import { StyleSheet, View, TextInput, Button, Text, FlatList, ActivityIndicator, Image } from 'react-native'
+import { StyleSheet, View, TouchableOpacity, Text, FlatList, ActivityIndicator, Image } from 'react-native'
+import { FontAwesome } from '@expo/vector-icons';
 
 export default class App extends Component {
   constructor(props) {
@@ -21,9 +22,8 @@ export default class App extends Component {
   fetchPosts = async () => {
     try {
       const posts = await this.getPosts()
-      // console.log("TEST RETOUR DES IMAGES = ", posts)
       this.setState({ 
-        pictures: [ ...this.state.pictures, ...posts],
+        pictures: posts,
         isLoading: false 
         })
     } catch (e) {
@@ -35,10 +35,10 @@ export default class App extends Component {
     return firebase
       .firestore()
       .collection('Unknown')
+      .orderBy("date", "desc")
       .get()
       .then(function(querySnapshot) {
         let posts = querySnapshot.docs.map(doc => doc.data())
-        // console.log('posts =', posts[0].photoPath)
         return posts
       })
       .catch(function(error) {
@@ -57,17 +57,30 @@ export default class App extends Component {
   }
 
   render() {
-    console.log(this.state.pictures)
     return (
-      <View style={styles.MainContainer}>
+      <View style={styles.mainContainer}>
+        <View style={styles.headerContainer}>
+          <Text style={styles.title}>Autres photos</Text>
+          <TouchableOpacity 
+            style={styles.button}
+            onPress={() => this.fetchPosts()}>
+              <FontAwesome
+                name="refresh"
+                style={{ color: "black", fontSize: 40}}
+              />
+          </TouchableOpacity>
+        </View>
+       <View style={{flex: 9}}>
         <FlatList
           data={this.state.pictures}
           renderItem={({item}) => {
-            return <Image source={{uri: item.photoPath}}  style={{width: 400, height: 500, marginBottom: 20}}></Image>
-              // Text>{item.photoPath}</Text>
-            
-          }}
-          />
+            return <View style={styles.containerImage}>
+              <Image source={{uri: item.photoPath}}  style={styles.sizeImage}/>
+              </View>
+            }}
+          numColumns={2}
+        />
+       </View>
         {this._displayLoading()}
       </View>
     );
@@ -75,17 +88,34 @@ export default class App extends Component {
 }
 
 const styles = StyleSheet.create({
-  MainContainer: {
+  mainContainer: {
     justifyContent: 'center',
     flex: 1,
     marginTop: 40,
     backgroundColor: '#d32f2f'
   },
-
-  imageThumbnail: {
+  headerContainer:{
+  backgroundColor: 'white',
+  flex: 1,
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  padding: 10
+  },
+  title: {
+    fontSize: 30,
+    backgroundColor: 'white',
+    fontFamily: 'Futura'
+  },
+  containerImage: {
+    flex: 1,
+    flexDirection: 'column',
+    margin: 5
+  },
+  sizeImage: {
     justifyContent: 'center',
     alignItems: 'center',
-    height: 100,
+    height: 300,
   },
   loading_container: {
     position: 'absolute',

@@ -4,7 +4,6 @@ import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native'
 class HomeScreen extends React.Component {
     
     displayCamera = () => {
-        // console.log(this.props);
         this.props.navigation.navigate('CameraScreen');
     }
     
@@ -54,7 +53,8 @@ const styles = StyleSheet.create({
     tag: {
         fontFamily: 'Futura',
         textAlign: 'center',
-        fontSize : 18
+        fontSize : 20,
+        margin: 10
     },
     containerButton:{
         flex: 2,
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     button: {
         alignItems: "center",
         backgroundColor: "#DDDDDD",
-        padding: 20,
+        padding: 23,
     },
     textButton:{
         fontSize: 20,
